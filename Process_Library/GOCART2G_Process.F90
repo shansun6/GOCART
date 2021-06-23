@@ -20,6 +20,10 @@
    use Chem_MieTableMod2G
    use, intrinsic :: iso_fortran_env, only: IOSTAT_END
 
+   ! DH* 20210603 - temporary until code has been cleaned up
+   use gsd_chem_constants, only : kind_chem
+   ! *DH
+
    implicit none
    private
 
@@ -4540,14 +4544,14 @@ K_LOOP: do k = km, 1, -1
    integer  ::  i, j, k, iit, n, LH, kk, ios
 !   real :: pdog(i1:i2,j1:j2,km)      ! air mass factor dp/g [kg m-2]
    real, dimension(:,:,:), allocatable :: pdog           ! air mass factor dp/g [kg m-2]
-   real*8 :: Td_ls, Td_cv              ! ls and cv timescales [s]
-   real*8 :: pls, pcv, pac             ! ls, cv, tot precip [mm day-1]
-   real*8 :: qls(km), qcv(km)          ! ls, cv portion of moisture tendency [kg m-3 s-1]
-   real*8 :: qmx, qd, A                ! temporary variables on moisture
-   real*8 :: F, B, BT                  ! temporary variables on cloud, freq.
-   real*8, allocatable :: fd(:,:)      ! flux across layers [kg m-2]
-   real*8, allocatable :: dpfli(:,:,:) ! 
-   real*8, allocatable :: DC(:)        ! scavenge change in mass mixing ratio
+   real(kind=kind_chem) :: Td_ls, Td_cv              ! ls and cv timescales [s]
+   real(kind=kind_chem) :: pls, pcv, pac             ! ls, cv, tot precip [mm day-1]
+   real(kind=kind_chem) :: qls(km), qcv(km)          ! ls, cv portion of moisture tendency [kg m-3 s-1]
+   real(kind=kind_chem) :: qmx, qd, A                ! temporary variables on moisture
+   real(kind=kind_chem) :: F, B, BT                  ! temporary variables on cloud, freq.
+   real(kind=kind_chem), allocatable :: fd(:,:)      ! flux across layers [kg m-2]
+   real(kind=kind_chem), allocatable :: dpfli(:,:,:) ! 
+   real(kind=kind_chem), allocatable :: DC(:)        ! scavenge change in mass mixing ratio
 !   real :: c_h2o(i1:i2,j1:j2,km), cldliq(i1:i2,j1:j2,km), cldice(i1:i2,j1:j2,km)
    real, dimension(:,:,:), allocatable :: c_h2o, cldliq, cldice
    real, parameter :: kb = 1.3807e-23 ! Boltzmann constant [kg m2 s-1 K-1 mol-1]
@@ -4565,7 +4569,7 @@ K_LOOP: do k = km, 1, -1
 
 !  Conversion of SO2 mmr to SO2 vmr (since H2O2 is carried around like
 !  a volume mixing ratio)
-   real*8 :: fmr, SO2Soluble
+   real(kind=kind_chem) :: fmr, SO2Soluble
    fMR = airMolWght / fMassSO2
 
 !EOP
@@ -5018,7 +5022,7 @@ K_LOOP: do k = km, 1, -1
      implicit NONE
      ! !INPUT PARAMETERS:      
       real, intent(inout) :: aerosol
-      real*8, intent(in)  :: DC
+      real(kind=kind_chem), intent(in)  :: DC
 
         aerosol = aerosol - DC
         if (aerosol .lt. 1.0E-32) aerosol = 1.0E-32
@@ -5701,10 +5705,10 @@ K_LOOP: do k = km, 1, -1
 
 ! !Local Variables
    integer :: i, j, k, i1=1, j1=1, i2, j2
-   real*8  :: Fx, b, eff
-   real*8  :: rk1, rk2, rk3, rk4
-   real*8  :: tk, o2, oh, no3, air
-   real*8  :: dms, dms0, dms_oh
+   real(kind=kind_chem)  :: Fx, b, eff
+   real(kind=kind_chem)  :: rk1, rk2, rk3, rk4
+   real(kind=kind_chem)  :: tk, o2, oh, no3, air
+   real(kind=kind_chem)  :: dms, dms0, dms_oh
 
    data Fx  / 1.0 /
    data b   / 0.25 /
@@ -5867,9 +5871,9 @@ K_LOOP: do k = km, 1, -1
 
 ! !Local Variables
    integer :: i, j, k, j2, i2
-   real*8  :: rk1, rk2, rk, rkt, f1
-   real*8  :: L1, L2, Ld, SO2, SO2_cd, fc, fMR
-   real*8  :: oh, h2o2, SO20, tk, air, k0, ki, kk
+   real(kind=kind_chem)  :: rk1, rk2, rk, rkt, f1
+   real(kind=kind_chem)  :: L1, L2, Ld, SO2, SO2_cd, fc, fMR
+   real(kind=kind_chem)  :: oh, h2o2, SO20, tk, air, k0, ki, kk
    real, dimension(:,:), allocatable :: fout
 
    data ki / 1.5e-12 /
@@ -6037,8 +6041,8 @@ K_LOOP: do k = km, 1, -1
 !
 ! !Local Variables
    integer :: i, j, k, i2, j2
-   real*8  :: rk, rkt, Ld
-   real*8  :: SO4, SO40, pSO4
+   real(kind=kind_chem)  :: rk, rkt, Ld
+   real(kind=kind_chem)  :: SO4, SO40, pSO4
    real, dimension(:,:), allocatable :: fout
 
 !EOP
@@ -6138,8 +6142,8 @@ K_LOOP: do k = km, 1, -1
 
 ! !Local Variables
    integer :: i, j, k, i2, j2
-   real*8  :: rk, rkt, Ld
-   real*8  :: MSA, MSA0
+   real(kind=kind_chem)  :: rk, rkt, Ld
+   real(kind=kind_chem)  :: MSA, MSA0
    real, dimension(:,:), allocatable :: fout
 
 !EOP
@@ -7681,21 +7685,21 @@ loop2: DO l = 1,nspecies_HL
 !
       ! Arguments
       INTEGER           :: IRHX
-      REAL*8            :: MSO4, MNH4, MNO3, WH2O
+      real(kind=kind_chem)            :: MSO4, MNH4, MNO3, WH2O
 
       ! Local variables
       INTEGER           :: IRH
-      REAL*8            :: TSO4,  TNH4,  TNO3,  X,      AW,     AWC
-      REAL*8            :: MFS0,  MFS1,  MFS15, Y
-      REAL*8            :: Y0,    Y1,    Y15,   Y2,     Y3,     Y40
-      REAL*8            :: Y140,  Y1540, YC,    MFSSO4, MFSNO3
+      real(kind=kind_chem)            :: TSO4,  TNH4,  TNO3,  X,      AW,     AWC
+      real(kind=kind_chem)            :: MFS0,  MFS1,  MFS15, Y
+      real(kind=kind_chem)            :: Y0,    Y1,    Y15,   Y2,     Y3,     Y40
+      real(kind=kind_chem)            :: Y140,  Y1540, YC,    MFSSO4, MFSNO3
 
       ! Molecular weight parameters
-      REAL*8, PARAMETER :: MWSO4  = 96.0636d0
-      REAL*8, PARAMETER :: MWNH4  = 18.0985d0
-      REAL*8, PARAMETER :: MWNO3  = 62.0649d0
-      REAL*8, PARAMETER :: MW2    = MWSO4 + 2.0d0 * MWNH4
-      REAL*8, PARAMETER :: MWANO3 = MWNO3 + MWNH4
+      real(kind=kind_chem), PARAMETER :: MWSO4  = 96.0636d0
+      real(kind=kind_chem), PARAMETER :: MWNH4  = 18.0985d0
+      real(kind=kind_chem), PARAMETER :: MWNO3  = 62.0649d0
+      real(kind=kind_chem), PARAMETER :: MW2    = MWSO4 + 2.0d0 * MWNH4
+      real(kind=kind_chem), PARAMETER :: MWANO3 = MWNO3 + MWNH4
 
       !=================================================================
       ! The polynomials use data for aw as a function of mfs from Tang 
@@ -7705,10 +7709,10 @@ loop2: DO l = 1,nspecies_HL
       ! *** coefficients of polynomials fit to Tang and Munkelwitz data
       !     now give mfs as a function of water activity.
       !=================================================================
-      REAL*8 :: C1(4)  = (/ 0.9995178d0,  -0.7952896d0, &
+      real(kind=kind_chem) :: C1(4)  = (/ 0.9995178d0,  -0.7952896d0, &
      &                      0.99683673d0, -1.143874d0 /)
 
-      REAL*8 :: C15(4) = (/ 1.697092d0, -4.045936d0, &
+      real(kind=kind_chem) :: C15(4) = (/ 1.697092d0, -4.045936d0, &
      &                      5.833688d0, -3.463783d0 /)
 
       !=================================================================
@@ -7721,17 +7725,17 @@ loop2: DO l = 1,nspecies_HL
       !       Giaque et al. J.Am. Chem. Soc., 82: 62-70, 1960
       !       Zeleznik J. Phys. Chem. Ref. Data, 20: 157-1200
       !=================================================================
-      REAL*8 :: C0(4)  =  (/ 0.798079d0, -1.574367d0, &
+      real(kind=kind_chem) :: C0(4)  =  (/ 0.798079d0, -1.574367d0, &
      &                       2.536686d0, -1.735297d0 /)
 
       !=================================================================
       ! Polynomials for ammonium nitrate and ammonium sulfate are from:
       ! Chan et al.1992, Atmospheric Environment (26A): 1661-1673.
       !=================================================================
-      REAL*8 :: KNO3(6) = (/  0.2906d0,   6.83665d0, -26.9093d0, &
+      real(kind=kind_chem) :: KNO3(6) = (/  0.2906d0,   6.83665d0, -26.9093d0, &
      &                       46.6983d0, -38.803d0,    11.8837d0 /)
 
-      REAL*8 :: KSO4(6) = (/   2.27515d0, -11.147d0,   36.3369d0, &
+      real(kind=kind_chem) :: KSO4(6) = (/   2.27515d0, -11.147d0,   36.3369d0, &
      &                       -64.2134d0,   56.8341d0, -20.0953d0 /)
 
       !=================================================================
@@ -7884,10 +7888,10 @@ loop2: DO l = 1,nspecies_HL
       FUNCTION nh3_POLY4( A, X ) RESULT( Y )
 
       ! Arguments
-      REAL*8, INTENT(IN) :: A(4), X
+      real(kind=kind_chem), INTENT(IN) :: A(4), X
 
       ! Return value
-      REAL*8             :: Y
+      real(kind=kind_chem)             :: Y
 
       !=================================================================
       ! nh3_POLY4 begins here! 
@@ -7902,10 +7906,10 @@ loop2: DO l = 1,nspecies_HL
       FUNCTION nh3_POLY6( A, X ) RESULT( Y )
 
       ! Arguments
-      REAL*8, INTENT(IN) :: A(6), X
+      real(kind=kind_chem), INTENT(IN) :: A(6), X
 
       ! Return value
-      REAL*8             :: Y
+      real(kind=kind_chem)             :: Y
 
       !=================================================================
       ! nh3_POLY6 begins here! 
@@ -7927,7 +7931,7 @@ loop2: DO l = 1,nspecies_HL
 !   Dr. Francis S. Binkowski modified the routine on 6/24/91, 8/7/97
 ! ***
 ! *** modified 2/23/98 by fsb to incorporate Dr. Ingmar Ackermann's
-!     recommendations for setting a0, a1,a2 as real*8 variables.
+!     recommendations for setting a0, a1,a2 as real(kind=kind_chem) variables.
 !
 ! Modified by Bob Yantosca (10/15/02) 
 ! - Now use upper case / white space
@@ -7938,18 +7942,18 @@ loop2: DO l = 1,nspecies_HL
 !
       ! Arguments
       INTEGER           :: NR
-      REAL*8            :: A2, A1, A0
-      REAL*8            :: CRUTES(3)
+      real(kind=kind_chem)            :: A2, A1, A0
+      real(kind=kind_chem)            :: CRUTES(3)
 
       integer, intent(out) :: rc
 
       ! Local variables
-      REAL*8            :: QQ,    RR,    A2SQ,  THETA, DUM1, DUM2
-      REAL*8            :: PART1, PART2, PART3, RRSQ,  PHI,  YY1
-      REAL*8            :: YY2,   YY3,   COSTH, SINTH
-      REAL*8, PARAMETER :: ONE    = 1.0d0
-      REAL*8, PARAMETER :: SQRT3  = 1.732050808d0
-      REAL*8, PARAMETER :: ONE3RD = 0.333333333d0
+      real(kind=kind_chem)            :: QQ,    RR,    A2SQ,  THETA, DUM1, DUM2
+      real(kind=kind_chem)            :: PART1, PART2, PART3, RRSQ,  PHI,  YY1
+      real(kind=kind_chem)            :: YY2,   YY3,   COSTH, SINTH
+      real(kind=kind_chem), PARAMETER :: ONE    = 1.0d0
+      real(kind=kind_chem), PARAMETER :: SQRT3  = 1.732050808d0
+      real(kind=kind_chem), PARAMETER :: ONE3RD = 0.333333333d0
       ! !LOCAL VARIABLES:
       character (len=75) :: err_msg
 
@@ -8088,7 +8092,7 @@ loop2: DO l = 1,nspecies_HL
 !   F.Binkowski 8/7/97    Modified coefficients BETA0, BETA1, CGAMA
 !   R.Yantosca  9/25/02   Ported into "rpmares_mod.f" for GEOS-CHEM.  Cleaned
 !                         up comments, etc.  Also force double precision by
-!                         declaring REALs as REAL*8 and by using "D" exponents.
+!                         declaring REALs as real(kind=kind_chem) and by using "D" exponents.
 !******************************************************************************
       ! Error codes
 
@@ -8099,60 +8103,60 @@ loop2: DO l = 1,nspecies_HL
       !=================================================================
       INTEGER, PARAMETER :: NCAT = 2         ! number of cation
       INTEGER, PARAMETER :: NAN  = 3         ! number of anions
-      REAL*8,  PARAMETER :: XSTAT0 = 0       ! Normal, successful completion
-      REAL*8,  PARAMETER :: XSTAT1 = 1       ! File I/O error
-      REAL*8,  PARAMETER :: XSTAT2 = 2       ! Execution error
-      REAL*8,  PARAMETER :: XSTAT3 = 3       ! Special  error
+      real(kind=kind_chem),  PARAMETER :: XSTAT0 = 0       ! Normal, successful completion
+      real(kind=kind_chem),  PARAMETER :: XSTAT1 = 1       ! File I/O error
+      real(kind=kind_chem),  PARAMETER :: XSTAT2 = 2       ! Execution error
+      real(kind=kind_chem),  PARAMETER :: XSTAT3 = 3       ! Special  error
 
       !=================================================================
       ! ARGUMENTS and their descriptions
       !=================================================================
-      REAL*8, optional   :: MOLNU            ! tot # moles of all ions
-      REAL*8, optional   :: PHIMULT          ! multicomponent paractical 
+      real(kind=kind_chem), optional   :: MOLNU            ! tot # moles of all ions
+      real(kind=kind_chem), optional   :: PHIMULT          ! multicomponent paractical 
                                              !   osmotic coef
-      REAL*8             :: CAT(NCAT)        ! cation conc in moles/kg (input)
-      REAL*8             :: AN(NAN)          ! anion conc in moles/kg (input)
-      REAL*8             :: GAMA(NCAT,NAN)   ! mean molal ionic activity coefs
+      real(kind=kind_chem)             :: CAT(NCAT)        ! cation conc in moles/kg (input)
+      real(kind=kind_chem)             :: AN(NAN)          ! anion conc in moles/kg (input)
+      real(kind=kind_chem)             :: GAMA(NCAT,NAN)   ! mean molal ionic activity coefs
 
       !=================================================================
       ! SCRATCH LOCAL VARIABLES and their descriptions:
       !=================================================================
       INTEGER            :: IAN              ! anion indX
       INTEGER            :: ICAT             ! cation indX
-      REAL*8             :: FGAMA            !
-      REAL*8             :: I                ! ionic strength
-      REAL*8             :: R                !
-      REAL*8             :: S                !
-      REAL*8             :: TA               !
-      REAL*8             :: TB               !
-      REAL*8             :: TC               !
-      REAL*8             :: TEXPV            !
-      REAL*8             :: TRM              !
-      REAL*8             :: TWOI             ! 2*ionic strength
-      REAL*8             :: TWOSRI           ! 2*sqrt of ionic strength
-      REAL*8             :: ZBAR             !
-      REAL*8             :: ZBAR2            !
-      REAL*8             :: ZOT1             !
-      REAL*8             :: SRI              ! square root of ionic strength
-      REAL*8             :: F2(NCAT)         !
-      REAL*8             :: F1(NAN)          !
-      REAL*8             :: BGAMA (NCAT,NAN) !
-      REAL*8             :: X     (NCAT,NAN) !
-      REAL*8             :: M     (NCAT,NAN) ! molality of each electrolyte
-      REAL*8             :: LGAMA0(NCAT,NAN) ! binary activity coefficients
-      REAL*8             :: Y     (NAN,NCAT) !
-      REAL*8             :: BETA0 (NCAT,NAN) ! binary activity coef parameter
-      REAL*8             :: BETA1 (NCAT,NAN) ! binary activity coef parameter
-      REAL*8             :: CGAMA (NCAT,NAN) ! binary activity coef parameter
-      REAL*8             :: V1    (NCAT,NAN) ! # of cations in electrolyte
+      real(kind=kind_chem)             :: FGAMA            !
+      real(kind=kind_chem)             :: I                ! ionic strength
+      real(kind=kind_chem)             :: R                !
+      real(kind=kind_chem)             :: S                !
+      real(kind=kind_chem)             :: TA               !
+      real(kind=kind_chem)             :: TB               !
+      real(kind=kind_chem)             :: TC               !
+      real(kind=kind_chem)             :: TEXPV            !
+      real(kind=kind_chem)             :: TRM              !
+      real(kind=kind_chem)             :: TWOI             ! 2*ionic strength
+      real(kind=kind_chem)             :: TWOSRI           ! 2*sqrt of ionic strength
+      real(kind=kind_chem)             :: ZBAR             !
+      real(kind=kind_chem)             :: ZBAR2            !
+      real(kind=kind_chem)             :: ZOT1             !
+      real(kind=kind_chem)             :: SRI              ! square root of ionic strength
+      real(kind=kind_chem)             :: F2(NCAT)         !
+      real(kind=kind_chem)             :: F1(NAN)          !
+      real(kind=kind_chem)             :: BGAMA (NCAT,NAN) !
+      real(kind=kind_chem)             :: X     (NCAT,NAN) !
+      real(kind=kind_chem)             :: M     (NCAT,NAN) ! molality of each electrolyte
+      real(kind=kind_chem)             :: LGAMA0(NCAT,NAN) ! binary activity coefficients
+      real(kind=kind_chem)             :: Y     (NAN,NCAT) !
+      real(kind=kind_chem)             :: BETA0 (NCAT,NAN) ! binary activity coef parameter
+      real(kind=kind_chem)             :: BETA1 (NCAT,NAN) ! binary activity coef parameter
+      real(kind=kind_chem)             :: CGAMA (NCAT,NAN) ! binary activity coef parameter
+      real(kind=kind_chem)             :: V1    (NCAT,NAN) ! # of cations in electrolyte
                                              !   formula
-      REAL*8             :: V2    (NCAT,NAN) ! # of anions in electrolyte
+      real(kind=kind_chem)             :: V2    (NCAT,NAN) ! # of anions in electrolyte
                                              !   formula
       ! absolute value of charges of cation
-      REAL*8             :: ZP(NCAT) = (/ 1.0d0, 1.0d0 /)
+      real(kind=kind_chem)             :: ZP(NCAT) = (/ 1.0d0, 1.0d0 /)
 
       ! absolute value of charges of anion
-      REAL*8             :: ZM(NAN)  = (/ 2.0d0, 1.0d0, 1.0d0 /)
+      real(kind=kind_chem)             :: ZM(NAN)  = (/ 2.0d0, 1.0d0, 1.0d0 /)
 
       ! Character values.
       CHARACTER(LEN=120)      :: XMSG  = ' '
@@ -8343,8 +8347,8 @@ loop2: DO l = 1,nspecies_HL
       integer          , intent(in) :: err_int1
       integer          , intent(in) :: err_int2
       integer          , intent(in) :: err_num_reals
-      real*8           , intent(in) :: err_real1
-      real*8           , intent(in) :: err_real2
+      real(kind=kind_chem)           , intent(in) :: err_real1
+      real(kind=kind_chem)           , intent(in) :: err_real2
 
       integer, intent(out) :: rc
 !
@@ -8654,7 +8658,7 @@ loop2: DO l = 1,nspecies_HL
 !      Fixed normalization factors; a more accurate normalization would take
 !      in consideration longitude and time step
 !      ---------------------------------------------------------------------
-       real*8, save :: fBoreal = -1., fNonBoreal = -1
+       real(kind=kind_chem), save :: fBoreal = -1., fNonBoreal = -1
        real,   save :: fDT=-1
 
        integer :: hh, mm, ss, ndt, i, j, k
