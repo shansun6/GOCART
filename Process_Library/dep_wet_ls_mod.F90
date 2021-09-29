@@ -53,6 +53,9 @@ contains
         select case (chem_opt)
           case (CHEM_OPT_GOCART)
             alpha = 1.0
+            alpha(p_sulf  ) = 0.6 ! reduce wet scavenging for sulf
+            alpha(p_oc1   ) = 0.6 ! reduce wet scavenging for oc1
+            alpha(p_oc2   ) = 0.6 ! reduce wet scavenging for oc2
           case (CHEM_OPT_GOCART_RACM)
             alpha = 1.0
 !            alpha(p_h2o2) = 0.5
@@ -156,6 +159,10 @@ contains
 ! proportionality constant
 !
     frc(:,:)=0.1
+    if (nv==p_sulf .or. nv==p_oc1 .or. nv==p_oc2) then !reduce wet scavenging for sulf, oc1 & oc2
+      frc(:,:)=0.01
+    end if
+
     do i=its,ite
     do j=jts,jte
      var_sum_clw(i,j)=0.

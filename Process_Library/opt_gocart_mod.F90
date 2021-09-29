@@ -8654,10 +8654,13 @@
    !aero(k,1)=chem(i,k,j,p_sulf)*conv1a*1.e3*nh4_mfac !lzhang
    !aero(k,1)=chem(i,k,j,p_sulf)*conv1sulf*nh4_mfac
    !aero(k,1)=chem(i,k,j,p_sulf)*conv1sulf*1.6
-   aero(k,1)=(chem(i,k,j,p_sulf)+chem(i,k,j,p_msa))*conv1sulf*nh4_mfac
-   aero(k,2)=(chem(i,k,j,p_bc1)+chem(i,k,j,p_bc2))*conv1a
-   aero(k,3)=(chem(i,k,j,p_oc1))*conv1a*oc_mfac
-   aero(k,4)=(chem(i,k,j,p_oc2))*conv1a*oc_mfac
+   !aero(k,1)=(chem(i,k,j,p_sulf)+chem(i,k,j,p_msa))*conv1sulf*nh4_mfac
+   aero(k,1)=(chem(i,k,j,p_sulf)+chem(i,k,j,p_msa))*conv1sulf*2.0
+   aero(k,2)=(chem(i,k,j,p_bc1)+chem(i,k,j,p_bc2))*conv1a*2.4
+   !aero(k,3)=(chem(i,k,j,p_oc1))*conv1a*oc_mfac
+   !aero(k,4)=(chem(i,k,j,p_oc2))*conv1a*oc_mfac
+   aero(k,3)=(chem(i,k,j,p_oc1))*conv1a*2.4
+   aero(k,4)=(chem(i,k,j,p_oc2))*conv1a*2.4
    !aero(k,5)=(chem(i,k,j,p_seas_1)+chem(i,k,j,p_seas_2))*conv1a !lzhang
    !aero(k,6)=(chem(i,k,j,p_seas_3)+chem(i,k,j,p_seas_4)+chem(i,k,j,p_seas_5))*conv1a !lzhang
    aero(k,5)=(chem(i,k,j,p_seas_1)+chem(i,k,j,p_seas_2))*conv1a*5. !lzhang
